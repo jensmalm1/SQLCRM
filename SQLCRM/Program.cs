@@ -2,15 +2,13 @@
 using System.ComponentModel;
 using System;
 using System.Data.SqlClient;
+using System.Linq;
+using SQLCRM;
 
 
 namespace SQLCRM
 {
-    class Telefon
-    {
-        private string Telefonnummer { get; set; }
-
-    }
+}
     class Program
     {
         private static string Constring;
@@ -25,7 +23,7 @@ namespace SQLCRM
             while (true)
             {
                 Console.WriteLine(
-                    $"{"|",-50}What do you want to do?\n1.Add Customer \n2.Edit Customer \n3.Delete Customer \n4.Show Customers");
+                    $"{"|",-50}What do you want to do?\n1.Add Customer \n2.Add Phones\n3.Edit Customer \n4.Delete Customer \n5.Show Phones \n6.Show Customers \nelse show all");
                 string input = Console.ReadLine();
                 if (input != "Quit")
                 {
@@ -33,15 +31,24 @@ namespace SQLCRM
                     switch (caseSwitch)
                     {
                         case 1:
-                            Add();
+                            AddCustomer();
                             break;
                         case 2:
-                            EditCustomer();
+                            AddPhone();
                             break;
                         case 3:
+                            EditCustomer();
+                            break;
+                        case 4:
                             DeleteCustomer();
                             break;
-                        default:
+                        case 5:
+                            PrintPhones();
+                            break;
+                        case 6:
+                            PrintCustomers();
+                            break;
+                    default:
                             PrintAll();
                             break;
                     }
@@ -50,17 +57,33 @@ namespace SQLCRM
             }
         }
 
-        static void PrintAll()
+        static void PrintCustomers()
         {
-            var list = GetCustromerFromDB();
-
-            list.ForEach(item => Console.WriteLine(item.ToString()));
+            var customerList = GetCustomerFromDB();
+            customerList.ForEach(item => Console.WriteLine(item.ToString()));
         }
 
-        static List<Kund> GetCustromerFromDB()
+        static void PrintPhones()
         {
-            var list=new List<Kund>();
-            string sql = "SELECT * from Kundregister";
+            var phoneList = GetPhoneFromDB();
+            phoneList.ForEach(item => Console.WriteLine(item.ToString()));
+        }
+
+        static void PrintAll()
+        {
+            var phoneList = GetPhoneFromDB();
+            var customerList = GetCustomerFromDB();
+            var allList = GetCustomerFromDB();
+
+            customerList.ForEach(item => Console.WriteLine(item.ToString()));
+
+        }
+
+
+    static List<Customers> GetCustomerFromDB()
+        {
+            var list=new List<Customers>();
+            string sql = "SELECT * from Customer";
 
             using (SqlConnection connection = new SqlConnection(Constring))
             using (SqlCommand command =new SqlCommand(sql,connection))
@@ -71,25 +94,69 @@ namespace SQLCRM
 
                 while (reader.Read())
                 {
-                    var Förnamn = reader.GetString(0);
-                    var Efternamn = reader.GetString(1);
-                    var Epost = reader.GetString(2);
-                    var Telefonnummer = reader.GetString(3);
-                    var KundID = reader.GetInt32(4);
+                    var Type = reader.GetString(0);
+                    var Firstname = reader.GetString(1);
+                    var Surname = reader.GetString(2);
+                    var Email = reader.GetString(3);
+                    var CustomerId = reader.GetInt32(4);
 
-                    list.Add(new Kund(Förnamn, Efternamn, Epost, Telefonnummer, KundID));
+                    list.Add(new Customers(Type,Firstname, Surname, Email, CustomerId));
 
                 }
             }
+
+
+            return list;
+        }
+        static List<Phone> GetPhoneFromDB()
+        {
+            var list = new List<Phone>();
+            string sql = "SELECT * from Phones";
+
+            using (SqlConnection connection = new SqlConnection(Constring))
+            using (SqlCommand command = new SqlCommand(sql, connection))
+            {
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var PhoneId = reader.GetInt32(0);
+                    var HomePhone = reader.GetString(1);
+                    var MobilePhone = reader.GetString(2);
+                    var WorkingPhone = reader.GetString(3);
+                    var EmergencyContactPhone = reader.GetString(4);
+                    var CustomerId = reader.GetInt32(5);
+
+                list.Add(new Phone(PhoneId, HomePhone, MobilePhone, WorkingPhone, EmergencyContactPhone, CustomerId));
+
+                }
+            }
+
             return list;
         }
 
-        public static void Add()
+
+    public static void AddPhone()
+        {
+            Console.WriteLine("Give Home-Phonenumber, Mobilenumber, Working Phonenumber, Emergency-Contact Phonenumner and Customer-ID");
+            string[] input = Console.ReadLine().Split(',');
+            string sql = $"INSERT INTO Phones (HomePhone,MobilePhone,WorkingPhone,EmergencyContactPhone,CustomerID) VALUES ('{input[0]}','{input[1]}','{input[2]}','{input[3]}','{input[4]}');";
+            using (SqlConnection connection = new SqlConnection(Constring))
+            using (SqlCommand command = new SqlCommand(sql, connection))
+            {
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+            }
+        }
+
+        public static void AddCustomer()
         {
 
-            Console.WriteLine("Ge förnamn, efternamn, epost, telefonnummer");
+            Console.WriteLine("Give firstname, surname ,type, and email");
             string[] input = Console.ReadLine().Split(',');
-            string sql = $"INSERT INTO Kundregister (Förnamn,Efternamn,Epost,Telefonnummer) VALUES ('{input[0]}','{input[1]}','{input[2]}','{input[3]}');";
+            string sql = $"INSERT INTO Customer (Firstname,Surname,Type,Email) VALUES ('{input[0]}','{input[1]}','{input[2]}','{input[3]}');";
             using (SqlConnection connection = new SqlConnection(Constring))
             using (SqlCommand command = new SqlCommand(sql, connection))
             {
@@ -102,9 +169,9 @@ namespace SQLCRM
         {
             Console.WriteLine("Which ID do you want to edit?");
             int iD=Int32.Parse(Console.ReadLine());
-            Console.WriteLine("Write new input? (Ge förnamn, efternamn, epost, telefonnummer)");
+            Console.WriteLine("Write new input? (Ge firstname, surname, Type, email)");
             string[] input = Console.ReadLine().Split(',');
-            string sql = $"UPDATE Kundregister SET Förnamn='{input[0]}',Efternamn='{input[1]}',Epost='{input[2]}',Telefonnummer='{input[3]}' where KundID={iD}";
+            string sql = $"UPDATE Kundregister SET Firstname='{input[0]}',Surname='{input[1]}',Surname='{input[12]}',Email='{input[3]}', where CustomerId={iD}";
 
             using (SqlConnection connection = new SqlConnection(Constring))
             using (SqlCommand command = new SqlCommand(sql, connection))
@@ -118,7 +185,7 @@ namespace SQLCRM
         {
             Console.WriteLine("Which ID do you want to delete?");
             int iD = Int32.Parse(Console.ReadLine());
-            string sql = $"DELETE FROM Kundregister WHERE KundID={iD}";
+            string sql = $"DELETE FROM Kundregister WHERE CustomerId={iD}";
 
             using (SqlConnection connection = new SqlConnection(Constring))
             using (SqlCommand command = new SqlCommand(sql, connection))
@@ -135,12 +202,12 @@ namespace SQLCRM
         //    string lookUpName = Console.ReadLine();
         //    list.ForEach(item =>
         //    {
-        //        if (item.Efternamn== lookUpName)
+        //        if (item.Surname== lookUpName)
         //        {
-        //            item.KundID=
+        //            item.CustomerId=
         //            Kund found=Kund()
         //        }
         //    }
         //}
     }
-}
+
