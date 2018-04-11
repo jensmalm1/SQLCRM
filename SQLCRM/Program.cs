@@ -6,6 +6,11 @@ using System.Data.SqlClient;
 
 namespace SQLCRM
 {
+    class Telefon
+    {
+        private string Telefonnummer { get; set; }
+
+    }
     class Program
     {
         private static string Constring;
@@ -20,7 +25,7 @@ namespace SQLCRM
             while (true)
             {
                 Console.WriteLine(
-                    "What do you want to do?\n1.Add Customer \n2.Edit Customer \n3.Delete Customer \n4.Show Customers");
+                    $"{"|",-50}What do you want to do?\n1.Add Customer \n2.Edit Customer \n3.Delete Customer \n4.Show Customers");
                 string input = Console.ReadLine();
                 if (input != "Quit")
                 {
@@ -82,7 +87,6 @@ namespace SQLCRM
         public static void Add()
         {
 
-
             Console.WriteLine("Ge förnamn, efternamn, epost, telefonnummer");
             string[] input = Console.ReadLine().Split(',');
             string sql = $"INSERT INTO Kundregister (Förnamn,Efternamn,Epost,Telefonnummer) VALUES ('{input[0]}','{input[1]}','{input[2]}','{input[3]}');";
@@ -107,7 +111,6 @@ namespace SQLCRM
             {
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-
             }
         }
 
@@ -125,20 +128,19 @@ namespace SQLCRM
                 SqlDataReader reader = command.ExecuteReader();
             }
         }
-
-        static void Search()
-        {
-            var list = GetCustromerFromDB();
-            Console.WriteLine("What Lastname are you looking for?");
-            string lookUpName=Console.ReadLine();
-            list.ForEach(item =>
-            {
-                if (item = lookUpNamew)
-                {
-
-                }
-            }
-
-        }
+        //static void Search()
+        //{
+        //    var list = GetCustromerFromDB();
+        //    Console.WriteLine("What Lastname are you looking for?");
+        //    string lookUpName = Console.ReadLine();
+        //    list.ForEach(item =>
+        //    {
+        //        if (item.Efternamn== lookUpName)
+        //        {
+        //            item.KundID=
+        //            Kund found=Kund()
+        //        }
+        //    }
+        //}
     }
 }

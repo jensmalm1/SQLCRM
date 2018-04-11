@@ -6,10 +6,10 @@ namespace SQLCRM
     class Kund
     {
         private string Förnamn { get; set; }
-        private string Efternamn { get; set; }
+       public string Efternamn { get; set; }
         private string Epost { get; set; }
-        private string Telefonnummer { get; set; }
-        private int KundID { get; set; }
+      
+       public int KundID { get; set; }
 
         public Kund(string förnamn, string efternamn, string epost, string telefonnummer, int kundId)
         {
@@ -30,13 +30,5 @@ namespace SQLCRM
             ret += $"KundID: {KundID}\n";
             return ret;
         }
-
-
-
     }
-    
-
-
-
-
 }
