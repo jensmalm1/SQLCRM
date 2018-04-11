@@ -15,15 +15,23 @@ namespace SQLCRM
         static void Main(string[] args)
         {
             Constring= @"Server = (localdb)\mssqllocaldb; Database = Kundregister; Trusted_Connection = True";
-            UserChoice();
+            bool cont = true;
+            while (cont)
+            {
+                UserChoice();
+
+            }
+
         }
+
+
 
         static void UserChoice()
         {
             while (true)
             {
                 Console.WriteLine(
-                    $"{"|",-50}What do you want to do?\n1.Add Customer \n2.Add Phones\n3.Edit Customer \n4.Delete Customer \n5.Show Phones \n6.Show Customers \nelse show all");
+                    $"{"|",0}What do you want to do?|\nType Quit to quit\n1.Add Customer \n2.Add Phones\n3.Edit Customer \n4.Delete Customer \n5.Show Phones \n6.Show Customers \nelse show all");
                 string input = Console.ReadLine();
                 if (input != "Quit")
                 {
@@ -48,6 +56,8 @@ namespace SQLCRM
                         case 6:
                             PrintCustomers();
                             break;
+
+
                     default:
                             PrintAll();
                             break;
@@ -56,6 +66,7 @@ namespace SQLCRM
                 break;
             }
         }
+
 
         static void PrintCustomers()
         {
