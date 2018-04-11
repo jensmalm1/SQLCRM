@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace SQLCRM
@@ -14,19 +15,21 @@ namespace SQLCRM
         //    Discount,
         //};
 
-       private string Firstname { get; set; }
+       public string Firstname { get; set; }
        public string Surname { get; set; }
-       private string Email { get; set; }
+       public string Email { get; set; }
        public int CustomerId { get; set; }
        public string Type { get; set; }
+       public Phone PhoneNumbers { get; set; }
 
-        public Customers(string type, string firstname, string efternamn,  string email, int customerId) 
+        public Customers(string type, string firstname, string surname,  string email, int customerId, Phone phone) 
         {
             Firstname = firstname;
-            Surname = efternamn;
+            Surname = surname;
             Email = email;
             Type = type;
             CustomerId = customerId;
+            PhoneNumbers = phone;
 
         }
 
