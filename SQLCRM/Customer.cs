@@ -21,6 +21,7 @@ namespace SQLCRM
        public int CustomerId { get; set; }
        public string Type { get; set; }
        public Phone PhoneNumbers { get; set; }
+        
 
         public Customers(string type, string firstname, string surname,  string email, int customerId, Phone phone) 
         {
