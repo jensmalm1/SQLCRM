@@ -17,6 +17,15 @@
             EmergencyContactPhone = emergencyContactPhone;
             CustomerId = customerId;
         }
+        public override string ToString()
+        {
 
+            string ret = $"Home phone: {HomePhone}\n";
+            ret += $"Mobile phone: {MobilePhone}\n";
+            ret += $"Working phone: {WorkingPhone}\n";
+            ret += $"Emergency contact phone: {EmergencyContactPhone}\n";
+
+            return ret;
+        }
     }
 }

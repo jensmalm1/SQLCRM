@@ -20,8 +20,9 @@ namespace SQLCRM
        public string Email { get; set; }
        public int CustomerId { get; set; }
        public string Type { get; set; }
+       
        public Phone PhoneNumbers { get; set; }
-        
+   
 
         public Customers(string type, string firstname, string surname,  string email, int customerId, Phone phone) 
         {
@@ -31,7 +32,7 @@ namespace SQLCRM
             Type = type;
             CustomerId = customerId;
             PhoneNumbers = phone;
-
+  
         }
 
         public override string ToString()
